@@ -8,24 +8,27 @@ const app = new Hono();
 app.use('/*', serveStatic({ root: './public' }));
 
 const turso = createClient({
-  url: process.env.TURSO_DATABASE_URL,
+  url: process.env.TURSO_DATABASE_URL as string,
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
+turso.executeMultiple(
+  "CREATE TABLE IF NOT EXISTS data(id INTEGER PRIMARY KEY AUTOINCREMENT, code INTEGER NOT NULL, collegeId INTEGER NOT NULL, first_name TEXT, q1 INTEGER NOT NULL, q2 INTEGER NOT NULL, q3 INTEGER NOT NULL, q4 INTEGER NOT NULL, q5 INTEGER NOT NULL, q6 INTEGER NOT NULL, q7 INTEGER NOT NULL, q8i INTEGER NOT NULL, q8ii INTEGER NOT NULL, q9a INTEGER NOT NULL, q9b INTEGER NOT NULL, q9c INTEGER NOT NULL, q10 INTEGER NOT NULL, q11a INTEGER NOT NULL, q11b INTEGER NOT NULL, q11c INTEGER NOT NULL, q12 INTEGER NOT NULL, q13a INTEGER NOT NULL, q13b INTEGER NOT NULL, q14 INTEGER NOT NULL, q15a INTEGER NOT NULL, q15b INTEGER NOT NULL, q15c INTEGER NOT NULL, q16 INTEGER NOT NULL, q17 INTEGER NOT NULL, q18 INTEGER NOT NULL, q19 INTEGER NOT NULL, q20 INTEGER NOT NULL, q21a INTEGER NOT NULL, q21b INTEGER NOT NULL, q22a INTEGER NOT NULL, q22b INTEGER NOT NULL, q23a INTEGER NOT NULL, q23b INTEGER NOT NULL, q24a INTEGER NOT NULL, q24b INTEGER NOT NULL, q25a INTEGER NOT NULL, q25b INTEGER NOT NULL, q26 INTEGER NOT NULL, q27 INTEGER NOT NULL, q28 INTEGER NOT NULL)"
+);
 
 app.get("/", (c) => {
-  return c.html("Hello work project");
+  return c.html("Hello work project2");
 });
 
 app.get("/users", async (c) => {
-  const { rows } = await turso.execute("SELECT * FROM users");
+  const { rows } = await turso.execute("SELECT * FROM data");
 
   return c.json({ rows });
 });
 
 app.get("/user/:id", async (c) => {
   const id = c.req.param('id');
-  const { rows } = await turso.execute({ sql: "SELECT * FROM users WHERE id=?", args: [id], });
+  const { rows } = await turso.execute({ sql: "SELECT * FROM data WHERE id=?", args: [id], });
 
   return c.json({ rows });
 });
@@ -43,7 +46,7 @@ app.post('/user', async (c) => {
 
   try {
     await turso.execute({
-      sql: "INSERT INTO users (name) VALUES (?)",
+      sql: "INSERT INTO data (name) VALUES (?)",
       args: [name],
     });
     return c.json({ name });
@@ -63,8 +66,8 @@ app.post('/user-form', async (c) => {
   c.set('code', code);
   const collegeId = body.get('collegeId');
   c.set('collegeId', collegeId);
-  const name = body.get('name');
-  c.set('name', name);
+  const first_name = body.get('first_name');
+  c.set('first_name', first_name);
   const q1 = body.get('q1');
   c.set('q1', q1);
   const q2 = body.get('q2');
@@ -151,52 +154,8 @@ app.post('/user-form', async (c) => {
     // Assuming db.run is asynchronous, wait for the query to complete
 
     await turso.execute({
-      sql: "INSERT INTO users (name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      args: [
-        code,
-        collegeId,
-        name,
-        q1,
-        q2,
-        q3,
-        q4,
-        q5,
-        q6,
-        q7,
-        q8i,
-        q8ii,
-        q9a,
-        q9b,
-        q9c,
-        q10,
-        q11a,
-        q11b,
-        q11c,
-        q12,
-        q13a,
-        q13b,
-        q14,
-        q15a,
-        q15b,
-        q15c,
-        q16,
-        q17,
-        q18,
-        q19,
-        q20,
-        q21a,
-        q21b,
-        q22a,
-        q22b,
-        q23a,
-        q23b,
-        q24a,
-        q24b,
-        q25a,
-        q25b,
-        q26,
-        q27,
-        q28],
+      sql: "INSERT INTO data (code, collegeId, first_name, q1, q2, q3, q4, q5, q6, q7, q8i, q8ii, q9a, q9b, q9c, q10, q11a, q11b, q11c, q12, q13a, q13b, q14, q15a, q15b, q15c, q16, q17, q18, q19, q20, q21a, q21b, q22a, q22b, q23a, q23b, q24a, q24b, q25a, q25b, q26, q27, q28,) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      args: [code, collegeId, first_name, q1, q2, q3, q4, q5, q6, q7, q8i, q8ii, q9a, q9b, q9c, q10, q11a, q11b, q11c, q12, q13a, q13b, q14, q15a, q15b, q15c, q16, q17, q18, q19, q20, q21a, q21b, q22a, q22b, q23a, q23b, q24a, q24b, q25a, q25b, q26, q27, q28],
     });
     // Return a response with the inserted values (or a success message)
 
@@ -210,5 +169,4 @@ app.post('/user-form', async (c) => {
 });
 
 export default app;
-
 
