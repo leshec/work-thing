@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>mvp</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <!-- have a button POST a click via AJAX -->
+</head>
+<style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+  }
+
+  .grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+  }
+</style>
+
+<body hx-boost="true">
+
+  <div>
+    hello mvp from client side
+  </div>
+  <button hx-get="/clicked" hx-swap="outerHTML">
+    Click Me
+  </button>
+
+  <div class="grid-container">
+    <form id="myForm">
+      <input type="text" name="code" placeholder="code from teacher" />
+      <input type="text" name="collegeId" placeholder="college Id" />
+      <input type="text" name="name" placeholder="name" />
+      <div class="grid-item">
+        <label for="q1">q1</label>
+        <input type="number" name="q1" id="q1" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q2">q2</label>
+        <input type="number" name="q2" id="q2" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q3">q3</label>
+        <input type="number" name="q3" id="q3" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q4">q4</label>
+        <input type="number" name="q4" id="q4" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q5">q5</label>
+        <input type="number" name="q5" id="q5" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q6">q6</label>
+        <input type="number" name="q6" id="q6" min="0" max="4" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q7">q7</label>
+        <input type="number" name="q7" id="q7" min="0" max="4" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q8i">q8i</label>
+        <input type="number" name="q8i" id="q8i" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q8ii">q8ii</label>
+        <input type="number" name="q8ii" id="q8ii" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q9a">q9a</label>
+        <input type="number" name="q9a" id="q9a" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q9b">q9b</label>
+        <input type="number" name="q9b" id="q9b" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q9c">q9c</label>
+        <input type="number" name="q9c" id="q9c" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q10">q10</label>
+        <input type="number" name="q10" id="q10" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q11a">q11a</label>
+        <input type="number" name="q11a" id="q11a" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q11b">q11b</label>
+        <input type="number" name="q11b" id="q11b" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q11c">q11c</label>
+        <input type="number" name="q11c" id="q11c" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q12">q12</label>
+        <input type="number" name="q12" id="q12" min="0" max="4" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q13a">q13a</label>
+        <input type="number" name="q13a" id="q13a" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q13b">q13b</label>
+        <input type="number" name="q13b" id="q13b" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q14">q14</label>
+        <input type="number" name="q14" id="q14" min="0" max="3" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q15a">q15a</label>
+        <input type="number" name="q15a" id="q15a" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q15b">q15b</label>
+        <input type="number" name="q15b" id="q15b" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q15c">q15c</label>
+        <input type="number" name="q15c" id="q15c" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q16">q16</label>
+        <input type="number" name="q16" id="q16" min="0" max="3" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q17">q17</label>
+        <input type="number" name="q17" id="q17" min="0" max="3" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q18">q18</label>
+        <input type="number" name="q18" id="q18" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q19">q19</label>
+        <input type="number" name="q19" id="q19" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q20">q20</label>
+        <input type="number" name="q20" id="q20" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q21a">q21a</label>
+        <input type="number" name="q21a" id="q21a" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q21b">q21b</label>
+        <input type="number" name="q21b" id="q21b" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q22a">q22a</label>
+        <input type="number" name="q22a" id="q22a" min="0" max="4" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q22b">q22b</label>
+        <input type="number" name="q22b" id="q22b" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q23a">q23a</label>
+        <input type="number" name="q23a" id="q23a" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q23b">q23b</label>
+        <input type="number" name="q23b" id="q23b" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q24a">q24a</label>
+        <input type="number" name="q24a" id="q24a" min="0" max="3" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q24b">q24b</label>
+        <input type="number" name="q24b" id="q24b" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q25a">q25a</label>
+        <input type="number" name="q25a" id="q25a" min="0" max="3" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q25b">q25b</label>
+        <input type="number" name="q25b" id="q25b" min="0" max="1" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q26">q26</label>
+        <input type="number" name="q26" id="q26" min="0" max="5" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q27">q27</label>
+        <input type="number" name="q27" id="q27" min="0" max="2" step="1" />
+      </div>
+      <div class="grid-item">
+        <label for="q28">q28</label>
+        <input type="number" name="q28" id="q28" min="0" max="3" step="1" />
+      </div>
+      <button hx-post="/user-form" hx-target="this" hx-swap="none">
+        submit
+      </button>
+    </form>
+  </div>
+
+  <div class="location">
+    <script>
+      // Wait for the page to load
+      window.onload = function () {
+        // Get the form element by its ID
+        const form = document.getElementById('myForm');
+
+        // Reset the form to its initial state
+        form.reset();
+      };
+    </script>
+</body>
+
+</html>
