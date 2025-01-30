@@ -14,9 +14,10 @@ const tursoClient = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
+
 // Create the database table if it doesn't already exist
 await tursoClient.execute(`
-  CREATE TABLE IF NOT EXISTS data (
+  CREATE TABLE IF NOT EXISTS data3 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     code INTEGER NOT NULL,
     collegeId INTEGER NOT NULL,
@@ -28,40 +29,28 @@ await tursoClient.execute(`
     q5 INTEGER NOT NULL,
     q6 INTEGER NOT NULL,
     q7 INTEGER NOT NULL,
-    q8i INTEGER NOT NULL,
-    q8ii INTEGER NOT NULL,
-    q9a INTEGER NOT NULL,
-    q9b INTEGER NOT NULL,
-    q9c INTEGER NOT NULL,
+    q8 INTEGER NOT NULL,
+    q9 INTEGER NOT NULL,
     q10 INTEGER NOT NULL,
-    q11a INTEGER NOT NULL,
-    q11b INTEGER NOT NULL,
-    q11c INTEGER NOT NULL,
+    q11 INTEGER NOT NULL,
     q12 INTEGER NOT NULL,
-    q13a INTEGER NOT NULL,
-    q13b INTEGER NOT NULL,
+    q13 INTEGER NOT NULL,
     q14 INTEGER NOT NULL,
-    q15a INTEGER NOT NULL,
-    q15b INTEGER NOT NULL,
-    q15c INTEGER NOT NULL,
+    q15 INTEGER NOT NULL,
     q16 INTEGER NOT NULL,
     q17 INTEGER NOT NULL,
     q18 INTEGER NOT NULL,
     q19 INTEGER NOT NULL,
     q20 INTEGER NOT NULL,
-    q21a INTEGER NOT NULL,
-    q21b INTEGER NOT NULL,
-    q22a INTEGER NOT NULL,
-    q22b INTEGER NOT NULL,
-    q23a INTEGER NOT NULL,
-    q23b INTEGER NOT NULL,
-    q24a INTEGER NOT NULL,
-    q24b INTEGER NOT NULL,
-    q25a INTEGER NOT NULL,
-    q25b INTEGER NOT NULL,
+    q21 INTEGER NOT NULL,
+    q22 INTEGER NOT NULL,
+    q23 INTEGER NOT NULL,
+    q24 INTEGER NOT NULL,
+    q25 INTEGER NOT NULL,
     q26 INTEGER NOT NULL,
     q27 INTEGER NOT NULL,
-    q28 INTEGER NOT NULL
+    q28 INTEGER NOT NULL,
+    q29 INTEGER NOT NULL
   )
 `);
 
@@ -72,16 +61,29 @@ app.get("/", (c) => {
 
 // Fetch all users
 app.get("/users", async (c) => {
-  const { rows } = await tursoClient.execute("SELECT * FROM data");
+  const { rows } = await tursoClient.execute("SELECT * FROM data3");
   return c.json({ rows });
 });
 
 // Fetch a specific user by ID
 app.get("/user/:id", async (c) => {
   const id = c.req.param("id");
-  const { rows } = await tursoClient.execute({ sql: "SELECT * FROM data WHERE id=?", args: [id] });
+  const { rows } = await tursoClient.execute({ sql: "SELECT * FROM data3 WHERE id=?", args: [id] });
   return c.json({ rows });
 });
+
+
+//read into memory the paper3rag
+app.get("/info", async (c) => {
+const  {info}  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score FROM paper3rag");
+  console.log(info);
+
+  return c.json({ info });
+});
+
+
+
+
 
 // Add a user via JSON body
 app.post("/user", async (c) => {
@@ -93,7 +95,7 @@ app.post("/user", async (c) => {
   }
 
   try {
-    await tursoClient.execute({ sql: "INSERT INTO data (first_name) VALUES (?)", args: [name] });
+    await tursoClient.execute({ sql: "INSERT INTO data3 (first_name) VALUES (?)", args: [name] });
     return c.json({ success: true, name });
   } catch (error) {
     console.error("Error inserting user:", error);
@@ -116,52 +118,39 @@ app.post('/user-form', async (c) => {
   const q5 = body.get('q5');
   const q6 = body.get('q6');
   const q7 = body.get('q7');
-  const q8i = body.get('q8i');
-  const q8ii = body.get('q8ii');
-  const q9a = body.get('q9a');
-  const q9b = body.get('q9b');
-  const q9c = body.get('q9c');
+  const q8 = body.get('q8');
+  const q9 = body.get('q9');
   const q10 = body.get('q10');
-  const q11a = body.get('q11a');
-  const q11b = body.get('q11b');
-  const q11c = body.get('q11c');
+  const q11 = body.get('q11');
   const q12 = body.get('q12');
-  const q13a = body.get('q13a');
-  const q13b = body.get('q13b');
+  const q13 = body.get('q13');
   const q14 = body.get('q14');
-  const q15a = body.get('q15a');
-  const q15b = body.get('q15b');
-  const q15c = body.get('q15c');
+  const q15 = body.get('q15');
   const q16 = body.get('q16');
   const q17 = body.get('q17');
   const q18 = body.get('q18');
   const q19 = body.get('q19');
   const q20 = body.get('q20');
-  const q21a = body.get('q21a');
-  const q21b = body.get('q21b');
-  const q22a = body.get('q22a');
-  const q22b = body.get('q22b');
-  const q23a = body.get('q23a');
-  const q23b = body.get('q23b');
-  const q24a = body.get('q24a');
-  const q24b = body.get('q24b');
-  const q25a = body.get('q25a');
-  const q25b = body.get('q25b');
+  const q21 = body.get('q21');
+  const q22 = body.get('q22');
+  const q23 = body.get('q23');
+  const q24 = body.get('q24');
+  const q25 = body.get('q25');
   const q26 = body.get('q26');
   const q27 = body.get('q27');
   const q28 = body.get('q28');
+  const q29 = body.get('q29');
 
   try {
     await tursoClient.execute({
       sql: `
-        INSERT INTO data (
-          code, collegeId, first_name, q1, q2, q3, q4, q5, q6, q7, q8i, q8ii, q9a, q9b, q9c, q10, q11a, q11b, q11c, q12, q13a, q13b, q14, q15a, q15b, q15c, q16, q17, q18, q19, q20, q21a, q21b, q22a, q22b, q23a, q23b, q24a, q24b, q25a, q25b, q26, q27, q28
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO data3 (
+          code, collegeId, first_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `,
       args: [
-        code, collegeId, first_name, q1, q2, q3, q4, q5, q6, q7, q8i, q8ii, q9a, q9b, q9c, q10, q11a, q11b, q11c,
-        q12, q13a, q13b, q14, q15a, q15b, q15c, q16, q17, q18, q19, q20, q21a, q21b, q22a, q22b, q23a, q23b, q24a,
-        q24b, q25a, q25b, q26, q27, q28,
+        code, collegeId, first_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11,
+        q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29
       ],
     });
 

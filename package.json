@@ -4,7 +4,7 @@
   },
   "dependencies": {
     "@libsql/client": "^0.6.0",
-    "hono": "^4.2.2",
+    "hono": "^4.6.19",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
