@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
 import { createClient } from "@libsql/client";
 import { turso as tursoHelper } from "./lib/turso";
+import { html, raw } from 'hono/html'
 
 const app = new Hono();
 
@@ -14,14 +15,56 @@ const tursoClient = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
+//read into memory the paper3rag db contents
+  const {rows }  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score FROM paper3rag");
+
+
+//process the user post and ouput html report
+function getInfo(body) {
+  let output = "<table border='1' style='border-collapse: collapse; width: 100%;'>";
+  output += "<tr style='color: black;'><th>Question</th><th>Learning Aim</th><th>Score</th><th>Status</th></tr>";
+  
+  for (let i = 0; i <= 28; i++) {
+    let a = "q" + (i + 1);
+    let score = parseInt(body.get(a));
+    let max_score = parseInt(rows[i].max_score);
+    let diff = max_score - score;
+    let color = "black";
+    let status = "";
+
+    if (diff === 0) {
+      color = "green";
+      status = "<span style='color: green; font-weight: bold;'>GREEN</span>";
+    } else if (diff === max_score) {
+      color = "red";
+      status = "<span style='color: red; font-weight: bold;'>RED</span>";
+    } else {
+      color = "orange";
+      status = "<span style='color: orange; font-weight: bold;'>AMBER</span>";
+    }
+
+    output += `<tr>
+                 <td style='color: black;'>q${rows[i].question_alpha}</td>
+                 <td style='color: black;'>${rows[i].learning_aim}</td>
+                 <td style='color: black;'>${score} / ${max_score}</td>
+                 <td>${status}</td>
+               </tr>`;
+  }
+  
+  output += "</table>";
+  return output;
+}
 
 // Create the database table if it doesn't already exist
 await tursoClient.execute(`
-  CREATE TABLE IF NOT EXISTS data3 (
+  CREATE TABLE IF NOT EXISTS data4 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     code INTEGER NOT NULL,
     collegeId INTEGER NOT NULL,
+    class_name TEXT,
+    teacher_name TEXT,
     first_name TEXT,
+    last_name TEXT,
     q1 INTEGER NOT NULL,
     q2 INTEGER NOT NULL,
     q3 INTEGER NOT NULL,
@@ -54,63 +97,43 @@ await tursoClient.execute(`
   )
 `);
 
-// Routes
 app.get("/", (c) => {
   return c.html("Hello work project2");
 });
 
-// Fetch all users
-app.get("/users", async (c) => {
-  const { rows } = await tursoClient.execute("SELECT * FROM data3");
-  return c.json({ rows });
-});
+// // Fetch all users
+// app.get("/users", async (c) => {
+//   const { rows } = await tursoClient.execute("SELECT * FROM data4");
+//   return c.json({ rows });
+// });
 
-// Fetch a specific user by ID
-app.get("/user/:id", async (c) => {
-  const id = c.req.param("id");
-  const { rows } = await tursoClient.execute({ sql: "SELECT * FROM data3 WHERE id=?", args: [id] });
-  return c.json({ rows });
-});
+// // Fetch a specific user by ID
+// app.get("/user/:id", async (c) => {
+//   const id = c.req.param("id");
+//   const { rows } = await tursoClient.execute({ sql: "SELECT * FROM data4 WHERE id=?", args: [id] });
+//   return c.json({ rows });
+// });
 
 
 //read into memory the paper3rag
 app.get("/info", async (c) => {
-const  {info}  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score FROM paper3rag");
-  console.log(info);
-
-  return c.json({ info });
+  const {rows}  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score FROM paper3rag");
+  rows.forEach((element) => console.log(element[2]));
+  return c.json({ rows });
 });
 
 
-
-
-
-// Add a user via JSON body
-app.post("/user", async (c) => {
-  const body = await c.req.json();
-  const { name } = body;
-
-  if (!name) {
-    return c.json({ error: "Name is required" }, 400);
-  }
-
-  try {
-    await tursoClient.execute({ sql: "INSERT INTO data3 (first_name) VALUES (?)", args: [name] });
-    return c.json({ success: true, name });
-  } catch (error) {
-    console.error("Error inserting user:", error);
-    return c.json({ error: "Failed to insert user" }, 500);
-  }
-});
-
-// Add a user via form submission
 app.post('/user-form', async (c) => {
   const body = await c.req.formData();
   console.log("Parsed body of post request:", body);
+  let output = getInfo(body);
 
   const code = body.get('code');
   const collegeId = body.get('collegeId');
+  const class_name = body.get('class_name');
+  const teacher_name = body.get('teacher_name');
   const first_name = body.get('first_name');
+  const last_name = body.get('last_name');
   const q1 = body.get('q1');
   const q2 = body.get('q2');
   const q3 = body.get('q3');
@@ -141,20 +164,21 @@ app.post('/user-form', async (c) => {
   const q28 = body.get('q28');
   const q29 = body.get('q29');
 
+
   try {
     await tursoClient.execute({
       sql: `
-        INSERT INTO data3 (
-          code, collegeId, first_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        INSERT INTO data4 (
+          code, collegeId, class_name, teacher_name, first_name, last_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `,
       args: [
-        code, collegeId, first_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11,
+        code, collegeId, class_name, teacher_name, first_name, last_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11,
         q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29
       ],
     });
 
-    return c.html('User data successfully inserted.');
+    return c.html(output);
   } catch (error) {
     console.error('Database insertion failed:', error);
     return c.json({ error: 'Database error occurred!' }, 500);
