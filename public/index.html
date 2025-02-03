@@ -39,18 +39,20 @@
 
 <body hx-boost="true">
 
-  <h1>Upload your scores from the paper1 mock</h1>
-  <p>Make sure you enter details correctly</p>
-  <p id="success"> </p>
+  <h1>Upload your scores from the paper3 mock</h1>
+  <p id="success">Make sure you enter details correctly</p>
   <div class="grid-container">
-    <form id="myForm">
+    <form id="myForm" onclick="window.location.href='#top'">
 
       <hr>
       <label> Please complete all the fields</label>
       <br>
-      <input type="text" name="code" placeholder="enter code 420" />
+      <input type="text" name="code" placeholder="code" />
       <input type="text" name="collegeId" placeholder="college Id" />
-      <input type="text" name="first_name" placeholder="first_name" />
+      <input type="text" name="class_name" placeholder="class name" />
+      <input type="text" name="teacher_name" placeholder="teacher name" />
+        <input type="text" name="first_name" placeholder="first name" />
+        <input type="text" name="last_name" placeholder="last name" />
       <hr>
       <div class="grid-item">
         <label for="q1"> q1</label>
@@ -169,7 +171,7 @@
         <input type="text" name="q29" id="q29" min="0" max="4" step="1" />
       </div>
 
-      <button id="submit-button" hx-post="/user-form" hx-target="this" hx-swap="none">
+      <button id="submit-button" hx-post="/user-form" hx-target="#success"  hx-swap="true">
         submit
       </button>
     </form>
@@ -194,7 +196,6 @@
       // Add an event listener to the button
       button.addEventListener('click', () => {
         // Change the button's color to green
-        button.style.backgroundColor = 'green';
 
         // Update the paragraph's text content
         successMessage.textContent = 'Success: Form submitted';
