@@ -16,17 +16,18 @@ const tursoClient = createClient({
 });
 
 //read into memory the paper3rag db contents
-  const {rows }  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score FROM paper3rag");
+  const {rows }  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score, maths_watch, maths_genie FROM paper3rag");
 
 
 //process the user post and ouput html report
 function getInfo(body) {
-  let output = "<table border='1' style='border-collapse: collapse; width: 100%;'>";
-  output += "<tr style='color: black;'><th>Question</th><th>Learning Aim</th><th>Score</th><th>Status</th></tr>";
-  
+  let output = "<table border='1' style='border-collapse: collapse; width: 80%;'>";
+  output += "<tr style='color: black;'><th>Q</th><th>Topic</th><th>Score</th><th>Status</th><th>Mathswatch</th><th>Maths Genie</th></tr>";
+  let total_score = 0;
   for (let i = 0; i <= 28; i++) {
     let a = "q" + (i + 1);
     let score = parseInt(body.get(a));
+    total_score += score;
     let max_score = parseInt(rows[i].max_score);
     let diff = max_score - score;
     let color = "black";
@@ -48,14 +49,16 @@ function getInfo(body) {
                  <td style='color: black;'>${rows[i].learning_aim}</td>
                  <td style='color: black;'>${score} / ${max_score}</td>
                  <td>${status}</td>
+                  <td style='color: black;'>clip:${rows[i].maths_watch}</td>
+                  <td style='color: black;'>${rows[i].maths_genie}</td>
                </tr>`;
   }
   
   output += "</table>";
+  output += `<div class="total"><p>Total score: ${total_score} / 80</p><div>`;
   return output;
 }
 
-// Create the database table if it doesn't already exist
 await tursoClient.execute(`
   CREATE TABLE IF NOT EXISTS data4 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

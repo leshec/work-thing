@@ -5,35 +5,70 @@
   <title>p3 mock analyser</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+      <link rel="icon" type="image/svg+xml" href="data:image/png;base64,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" alt="darth-vader">
+
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-  <!-- have a button POST a click via AJAX -->
 </head>
+
 <style>
   .grid-container {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  form, input {
+    font-size: 20px;
+    margin-bottom: 10px;
   }
 
   .grid-item {
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    font-size: 30px;
-    text-align: center;
+    margin: 10px 0;
   }
 
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
+  .btn-group {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-start; 
+    width: 100%; 
+    margin-left: 20px; 
+  }
+
+  .btn {
+    padding: 10px 15px;
+    border: 2px solid #333;
+    background-color: #f2f0ef;
     cursor: pointer;
+    font-size: 16px;
+    min-width: 40px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .btn.selected {
+    background-color: #333;
+    color: white;
   }
 
   #success {
     margin-top: 10px;
     font-size: 18px;
     color: green;
+  }
+
+  .total{
+
+    font-size: 25px;
+    color: black;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
   }
 </style>
 
@@ -62,33 +97,6 @@
   </form>
 </div>
 
-<style>
-  .grid-item {
-    margin: 10px 0;
-  }
-
-  .btn-group {
-    display: inline-flex;
-    gap: 5px;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 10px 15px;
-    border: 2px solid #333;
-    background-color: white;
-    cursor: pointer;
-    font-size: 16px;
-    min-width: 40px;
-    text-align: center;
-    transition: all 0.2s;
-  }
-
-  .btn.selected {
-    background-color: #333;
-    color: white;
-  }
-</style>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -140,7 +148,7 @@
       const hiddenInput = document.createElement("input");
       hiddenInput.type = "hidden";
       hiddenInput.name = name;
-      hiddenInput.value = ""; // No value selected initially
+      hiddenInput.value = "0";
 
       for (let i = 0; i <= max; i++) {
         const button = document.createElement("button");
@@ -150,11 +158,8 @@
         button.dataset.value = i;
 
         button.addEventListener("click", function () {
-          // Remove 'selected' class from all buttons in this group
           btnGroup.querySelectorAll(".btn").forEach(btn => btn.classList.remove("selected"));
-          // Highlight the selected button
           button.classList.add("selected");
-          // Update the hidden input value
           hiddenInput.value = i;
         });
 
@@ -167,162 +172,21 @@
     });
   });
 </script>
-<!--   <form id="myForm" onclick="window.location.href='#top'"> -->
-  <!---->
-  <!--     <hr> -->
-  <!--     <label> Please complete all the fields</label> -->
-  <!--     <br> -->
-  <!--     <input type="text" name="code" placeholder="code" /> -->
-  <!--     <input type="text" name="collegeId" placeholder="college Id" /> -->
-  <!--     <input type="text" name="class_name" placeholder="class name" /> -->
-  <!--     <input type="text" name="teacher_name" placeholder="teacher name" /> -->
-  <!--       <input type="text" name="first_name" placeholder="first name" /> -->
-  <!--       <input type="text" name="last_name" placeholder="last name" /> -->
-  <!--     <hr> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q1"> q1</label> -->
-  <!--       <input type="text" name="q1" id="q1" min="0" max="1" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q2">q2</label> -->
-  <!--       <input type="text" name="q2" id="q2" min="0" max="1" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q3">q3</label> -->
-  <!--       <input type="text" name="q3" id="q3" min="0" max="1" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q4">q4</label> -->
-  <!--       <input type="text" name="q4" id="q4" min="0" max="1" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q5">q5</label> -->
-  <!--       <input type="text" name="q5" id="q5" min="0" max="1" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q6">q6</label> -->
-  <!--       <input type="text" name="q6" id="q6" min="0" max="4" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q7">q7</label> -->
-  <!--       <input type="text" name="q7" id="q7" min="0" max="2" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q8">q8</label> -->
-  <!--       <input type="text" name="q8" id="q8" min="0" max="3" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q9">q9</label> -->
-  <!--       <input type="text" name="q9" id="q9" min="0" max="3" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q10">q10</label> -->
-  <!--       <input type="text" name="q10" id="q10" min="0" max="2" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q11">q11</label> -->
-  <!--       <input type="text" name="q11" id="q11" min="0" max="2" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q12">q12</label> -->
-  <!--       <input type="text" name="q12" id="q12" min="0" max="2" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q13">q13</label> -->
-  <!--       <input type="text" name="q13" id="q13" min="0" max="3" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q14">q14</label> -->
-  <!--       <input type="text" name="q14" id="q14" min="0" max="3" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q15">q15</label> -->
-  <!--       <input type="text" name="q15" id="q15" min="0" max="3" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q16">q16</label> -->
-  <!--       <input type="text" name="q16" id="q16" min="0" max="3" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q17">q17</label> -->
-  <!--       <input type="text" name="q17" id="q17" min="0" max="3" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q18">q18</label> -->
-  <!--       <input type="text" name="q18" id="q18" min="0" max="1" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q19">q19</label> -->
-  <!--       <input type="text" name="q19" id="q19" min="0" max="2" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q20">q20</label> -->
-  <!--       <input type="text" name="q20" id="q20" min="0" max="5" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q21">q21</label> -->
-  <!--       <input type="text" name="q21" id="q21" min="0" max="2" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q22">q22</label> -->
-  <!--       <input type="text" name="q22" id="q22" min="0" max="2" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q23">q23</label> -->
-  <!--       <input type="text" name="q23" id="q23" min="0" max="4" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q24">q24</label> -->
-  <!--       <input type="text" name="q24" id="q24" min="0" max="3" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q25">q25</label> -->
-  <!--       <input type="text" name="q25" id="q25" min="0" max="4" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q26">q26</label> -->
-  <!--       <input type="text" name="q26" id="q26" min="0" max="4" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q27">q27</label> -->
-  <!--       <input type="text" name="q27" id="q27" min="0" max="4" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q28">q28</label> -->
-  <!--       <input type="text" name="q28" id="q28" min="0" max="4" step="1" /> -->
-  <!--     </div> -->
-  <!--     <div class="grid-item"> -->
-  <!--       <label for="q29">q29</label> -->
-  <!--       <input type="text" name="q29" id="q29" min="0" max="4" step="1" /> -->
-  <!--     </div> -->
-  <!---->
-  <!--     <button id="submit-button" hx-post="/user-form" hx-target="#success"  hx-swap="true"> -->
-  <!--       submit -->
-  <!--     </button> -->
-    <!-- </form> -->
   </div>
   <p id="success"> </p>
   <div class="location">
 
 
     <script>
-      // Wait for the page to load
       window.onload = function () {
-        // Get the form element by its ID
         const form = document.getElementById('myForm');
-
-        // Reset the form to its initial state
         form.reset();
       };
-      // Select the button and the paragraph
+
       const button = document.getElementById('submit-button');
       const successMessage = document.getElementById('success');
 
-      // Add an event listener to the button
       button.addEventListener('click', () => {
-        // Change the button's color to green
-
-        // Update the paragraph's text content
         successMessage.textContent = 'Success: Form submitted';
       });
     </script>
