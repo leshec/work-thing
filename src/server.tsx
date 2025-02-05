@@ -181,11 +181,11 @@ app.post('/user-form', async (c) => {
       ],
     });
 
-    return c.html(output);
   } catch (error) {
     console.error('Database insertion failed:', error);
     return c.json({ error: 'Database error occurred!' }, 500);
   }
+  return c.html(output);
 });
 
 export default app;
