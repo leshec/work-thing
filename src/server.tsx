@@ -129,7 +129,6 @@ app.get("/info", async (c) => {
 app.post('/user-form', async (c) => {
   const body = await c.req.formData();
   console.log("Parsed body of post request:", body);
-  let output = getInfo(body);
 
   const code = body.get('code');
   const collegeId = body.get('collegeId');
@@ -185,7 +184,15 @@ app.post('/user-form', async (c) => {
     console.error('Database insertion failed:', error);
     return c.json({ error: 'Database error occurred!' }, 500);
   }
+
+  let output = getInfo(body);
+  try {
   return c.html(output);
+  } catch (error) {
+    console.error('upload feedback error:', error);
+    return c.json({error: 'error processing feedback'}, 500);
+  }
+
 });
 
 export default app;
