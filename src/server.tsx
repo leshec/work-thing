@@ -60,7 +60,7 @@ function getInfo(body) {
 }
 
 await tursoClient.execute(`
-  CREATE TABLE IF NOT EXISTS data4 (
+  CREATE TABLE IF NOT EXISTS data5 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     code INTEGER NOT NULL,
     collegeId INTEGER NOT NULL,
@@ -106,14 +106,14 @@ app.get("/", (c) => {
 
 // // Fetch all users
 // app.get("/users", async (c) => {
-//   const { rows } = await tursoClient.execute("SELECT * FROM data4");
+//   const { rows } = await tursoClient.execute("SELECT * FROM data5");
 //   return c.json({ rows });
 // });
 
 // // Fetch a specific user by ID
 // app.get("/user/:id", async (c) => {
 //   const id = c.req.param("id");
-//   const { rows } = await tursoClient.execute({ sql: "SELECT * FROM data4 WHERE id=?", args: [id] });
+//   const { rows } = await tursoClient.execute({ sql: "SELECT * FROM data5 WHERE id=?", args: [id] });
 //   return c.json({ rows });
 // });
 
@@ -170,7 +170,7 @@ app.post('/user-form', async (c) => {
   try {
     await tursoClient.execute({
       sql: `
-        INSERT INTO data4 (
+        INSERT INTO data5 (
           code, collegeId, class_name, teacher_name, first_name, last_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `,
