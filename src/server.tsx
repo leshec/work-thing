@@ -117,6 +117,11 @@ app.get("/", (c) => {
 //   return c.json({ rows });
 // });
 
+app.get("health-check", async (c) => {
+
+    return c.json({ message: 'health-check good' }, 200);
+  return
+}
 
 //read into memory the paper3rag
 app.get("/info", async (c) => {
