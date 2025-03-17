@@ -15,16 +15,15 @@ const tursoClient = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
-//read into memory the paper3rag db contents
-  const {rows }  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score, maths_watch, maths_genie FROM paper3rag");
+// Read into memory the paper2rag db contents
+const { rows } = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score, maths_watch, maths_genie FROM paper2rag");
 
-
-//process the user post and ouput html report
+// Process the user post and output HTML report
 function getInfo(body) {
   let output = "<table border='1' style='border-collapse: collapse; width: 80%;'>";
   output += "<tr style='color: black;'><th>Q</th><th>Topic</th><th>Score</th><th>Status</th><th>Mathswatch</th><th>Maths Genie</th></tr>";
   let total_score = 0;
-  for (let i = 0; i <= 28; i++) {
+  for (let i = 0; i <= 27; i++) {
     let a = "q" + (i + 1);
     let score = parseInt(body.get(a));
     total_score += score;
@@ -59,88 +58,26 @@ function getInfo(body) {
   return output;
 }
 
-await tursoClient.execute(`
-  CREATE TABLE IF NOT EXISTS data5 (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    code INTEGER NOT NULL,
-    collegeId INTEGER NOT NULL,
-    class_name TEXT,
-    teacher_name TEXT,
-    first_name TEXT,
-    last_name TEXT,
-    q1 INTEGER NOT NULL DEFAULT 0,
-    q2 INTEGER NOT NULL DEFAULT 0,
-    q3 INTEGER NOT NULL DEFAULT 0,
-    q4 INTEGER NOT NULL DEFAULT 0,
-    q5 INTEGER NOT NULL DEFAULT 0,
-    q6 INTEGER NOT NULL DEFAULT 0,
-    q7 INTEGER NOT NULL DEFAULT 0,
-    q8 INTEGER NOT NULL DEFAULT 0,
-    q9 INTEGER NOT NULL DEFAULT 0,
-    q10 INTEGER NOT NULL DEFAULT 0,
-    q11 INTEGER NOT NULL DEFAULT 0,
-    q12 INTEGER NOT NULL DEFAULT 0,
-    q13 INTEGER NOT NULL DEFAULT 0,
-    q14 INTEGER NOT NULL DEFAULT 0,
-    q15 INTEGER NOT NULL DEFAULT 0,
-    q16 INTEGER NOT NULL DEFAULT 0,
-    q17 INTEGER NOT NULL DEFAULT 0,
-    q18 INTEGER NOT NULL DEFAULT 0,
-    q19 INTEGER NOT NULL DEFAULT 0,
-    q20 INTEGER NOT NULL DEFAULT 0,
-    q21 INTEGER NOT NULL DEFAULT 0,
-    q22 INTEGER NOT NULL DEFAULT 0,
-    q23 INTEGER NOT NULL DEFAULT 0,
-    q24 INTEGER NOT NULL DEFAULT 0,
-    q25 INTEGER NOT NULL DEFAULT 0,
-    q26 INTEGER NOT NULL DEFAULT 0,
-    q27 INTEGER NOT NULL DEFAULT 0,
-    q28 INTEGER NOT NULL DEFAULT 0,
-    q29 INTEGER NOT NULL DEFAULT 0
-  )
-`);
-
 app.get("/", (c) => {
   return c.html("Hello work project2");
 });
 
-// // Fetch all users
-// app.get("/users", async (c) => {
-//   const { rows } = await tursoClient.execute("SELECT * FROM data5");
-//   return c.json({ rows });
-// });
-
-// // Fetch a specific user by ID
-// app.get("/user/:id", async (c) => {
-//   const id = c.req.param("id");
-//   const { rows } = await tursoClient.execute({ sql: "SELECT * FROM data5 WHERE id=?", args: [id] });
-//   return c.json({ rows });
-// });
-
 app.get("health-check", async (c) => {
-
-    return c.json({ message: 'health-check good' }, 200);
-  return
+  return c.json({ message: 'health-check good' }, 200);
 });
 
-//read into memory the paper3rag
+// Read into memory the paper3rag
 app.get("/info", async (c) => {
-  const {rows}  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score FROM paper3rag");
+  const { rows }  = await tursoClient.execute("SELECT question_alpha, learning_aim, max_score FROM paper2rag");
   rows.forEach((element) => console.log(element[2]));
   return c.json({ rows });
 });
 
-
-app.post('/user-form', async (c) => {
+app.patch('/user-form', async (c) => {
   const body = await c.req.formData();
   console.log("Parsed body of post request:", body);
 
-  const code = body.get('code');
-  const collegeId = body.get('collegeId');
-  const class_name = body.get('class_name');
-  const teacher_name = body.get('teacher_name');
-  const first_name = body.get('first_name');
-  const last_name = body.get('last_name');
+  const id = body.get('id');
   const q1 = body.get('q1');
   const q2 = body.get('q2');
   const q3 = body.get('q3');
@@ -169,35 +106,36 @@ app.post('/user-form', async (c) => {
   const q26 = body.get('q26');
   const q27 = body.get('q27');
   const q28 = body.get('q28');
-  const q29 = body.get('q29');
-
 
   try {
+    // Update the p2Students table based on the ID
     await tursoClient.execute({
       sql: `
-        INSERT INTO data5 (
-          code, collegeId, class_name, teacher_name, first_name, last_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        UPDATE p2Students SET
+          q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, q6 = ?, q7 = ?, q8 = ?, q9 = ?, q10 = ?, q11 = ?, q12 = ?,
+          q13 = ?, q14 = ?, q15 = ?, q16 = ?, q17 = ?, q18 = ?, q19 = ?, q20 = ?, q21 = ?, q22 = ?, q23 = ?,
+          q24 = ?, q25 = ?, q26 = ?, q27 = ?, q28 = ?
+        WHERE id = ?;
       `,
       args: [
-        code, collegeId, class_name, teacher_name, first_name, last_name, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11,
-        q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26, q27, q28, q29
+        q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12,
+        q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23,
+        q24, q25, q26, q27, q28, id
       ],
     });
 
   } catch (error) {
-    console.error('Database insertion failed:', error);
+    console.error('Database update failed:', error);
     return c.json({ error: 'Database error occurred!' }, 500);
   }
 
   let output = getInfo(body);
   try {
-  return c.html(output);
+    return c.html(output);
   } catch (error) {
-    console.error('upload feedback error:', error);
-    return c.json({error: 'error processing feedback'}, 500);
+    console.error('Error processing feedback:', error);
+    return c.json({ error: 'Error processing feedback' }, 500);
   }
-
 });
 
 export default app;
