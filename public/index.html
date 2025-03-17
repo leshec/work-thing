@@ -82,17 +82,12 @@
     <hr>
     <label>Please complete all the fields</label>
     <br>
-    <input type="text" name="code" placeholder="code" />
-    <input type="text" name="collegeId" placeholder="college Id" />
-    <input type="text" name="class_name" placeholder="class name" />
-    <input type="text" name="teacher_name" placeholder="teacher name" />
-    <input type="text" name="first_name" placeholder="first name" />
-    <input type="text" name="last_name" placeholder="last name" />
+    <input type="text" name="id" placeholder="college Id" />
     <hr>
 
     <div id="questions-container"></div>
 
-    <button id="submit-button" hx-post="/user-form" hx-target="#success" hx-swap="true" onclick="window.location.href='#top'">
+    <button id="submit-button" hx-patch="/user-form" hx-target="#success" hx-swap="true" onclick="window.location.href='#top'">
       Submit
     </button>
   </form>
@@ -111,30 +106,29 @@
       { name: "q3", max: 1 },
       { name: "q4", max: 1 },
       { name: "q5", max: 1 },
-      { name: "q6", max: 4 },
-      { name: "q7", max: 2 },
-      { name: "q8", max: 3 },
-      { name: "q9", max: 3 },
+      { name: "q6", max: 5 },
+      { name: "q7", max: 3 },
+      { name: "q8", max: 4 },
+      { name: "q9", max: 4 },
       { name: "q10", max: 2 },
-      { name: "q11", max: 2 },
-      { name: "q12", max: 2 },
+      { name: "q11", max: 1 },
+      { name: "q12", max: 3 },
       { name: "q13", max: 3 },
-      { name: "q14", max: 3 },
-      { name: "q15", max: 3 },
+      { name: "q14", max: 5 },
+      { name: "q15", max: 2 },
       { name: "q16", max: 3 },
       { name: "q17", max: 3 },
       { name: "q18", max: 3 },
       { name: "q19", max: 3 },
-      { name: "q20", max: 5 },
-      { name: "q21", max: 2 },
+      { name: "q20", max: 2 },
+      { name: "q21", max: 3 },
       { name: "q22", max: 2 },
       { name: "q23", max: 4 },
-      { name: "q24", max: 3 },
+      { name: "q24", max: 6 },
       { name: "q25", max: 4 },
       { name: "q26", max: 4 },
-      { name: "q27", max: 4 },
+      { name: "q27", max: 2 },
       { name: "q28", max: 4 },
-      { name: "q29", max: 4 },
     ];
 
     const container = document.getElementById("questions-container");
